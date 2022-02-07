@@ -12,7 +12,8 @@ ALLOWED_HOSTS = env.get("ALLOWED_HOSTS").split(" ")
 THIRD_PARTY_APPS = [
     'rest_framework',
     'djoser',
-    'rest_framework_simplejwt'
+    'rest_framework_simplejwt',
+    'testData'
 ]
 
 INSTALLED_APPS += THIRD_PARTY_APPS
