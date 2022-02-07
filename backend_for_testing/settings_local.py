@@ -16,6 +16,7 @@ THIRD_PARTY_APPS = [
     'rest_framework',
     'djoser',
     'rest_framework_simplejwt',
+    'drf_yasg'
 ]
 
 INSTALLED_APPS = INSTALLED_APPS + THIRD_PARTY_APPS + LOCAL_APPS
