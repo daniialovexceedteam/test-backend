@@ -8,15 +8,17 @@ SECRET_KEY = env.get("SECRET_KEY")
 
 ALLOWED_HOSTS = env.get("ALLOWED_HOSTS").split(" ")
 
+LOCAL_APPS = [
+    'testData',
+]
 
 THIRD_PARTY_APPS = [
     'rest_framework',
     'djoser',
     'rest_framework_simplejwt',
-    'testData'
 ]
 
-INSTALLED_APPS += THIRD_PARTY_APPS
+INSTALLED_APPS = INSTALLED_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 
 # Database
