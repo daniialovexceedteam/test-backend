@@ -28,7 +28,7 @@ INSTALLED_APPS = INSTALLED_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': env.get('POSTGRES_NAME'),
+        'NAME': env.get('POSTGRES_DB'),
         'USER': env.get('POSTGRES_USER'),
         'PASSWORD': env.get('POSTGRES_PASSWORD'),
         'HOST': env.get('POSTGRES_HOST')
