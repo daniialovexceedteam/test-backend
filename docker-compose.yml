@@ -10,14 +10,24 @@ services:
       - _postgres_data:/var/lib/postgresql/data
     env_file:
       - .env
-  web:
+  migrations:
     build: .
-    ports:
-      - 8000:8000
     volumes:
       - ./:/code/
     env_file:
       - .env
-    command: python manage.py runserver 0.0.0.0:8000
+    command: python manage.py migrate --noinput
     depends_on:
+      - db
+  web:
+    build: .
+    ports:
+      - 80:80
+    volumes:
+      - ./:/code/
+    env_file:
+      - .env
+    command: python manage.py runserver 0.0.0.0:80
+    depends_on:
+      - migrations
       - db
