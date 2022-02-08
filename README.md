@@ -1,7 +1,7 @@
 # data sandbox
 sandbox for API requests
 #### clone a repo
-- git clone
+- git clone && cd test-backend
 #### create .env file
 - touch .env
 #### add base settings to .env

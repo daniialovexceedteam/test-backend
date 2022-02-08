@@ -1,4 +1,4 @@
-"""backend_for_testing URL Configuration
+"""main URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/3.2/topics/http/urls/
@@ -39,5 +39,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("auth/", include("djoser.urls")),
     path("auth/", include("djoser.urls.jwt")),
-    path("", include("testData.urls"))
+    path("", include("testapi.urls"))
 ]

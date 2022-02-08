@@ -1,7 +1,7 @@
 from .settings import *
 
 LOCAL_APPS = [
-    'testData',
+    'testapi',
 ]
 
 THIRD_PARTY_APPS = [
