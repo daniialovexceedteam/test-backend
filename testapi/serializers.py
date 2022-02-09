@@ -4,10 +4,12 @@ from .models import Transaction, Card, Account
 
 
 class AccountSerializer(serializers.ModelSerializer):
-
     class Meta:
-        fields = ['owner', 'amount', 'id']
+        fields = ['amount', 'id']
         model = Account
+    
+    def create(self, validated_data):
+        return Account.objects.create(owner=self.context["request"].user)
 
 
 class CardSerializer(serializers.ModelSerializer):
