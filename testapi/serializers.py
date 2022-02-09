@@ -20,7 +20,7 @@ class CardSerializer(serializers.ModelSerializer):
         return instance.account.owner.id
 
     class Meta:
-        fields = ['account', 'amount', 'id', 'cvv', 'number', 'date_expire', 'owner']
+        fields = ['name', 'account', 'amount', 'id', 'cvv', 'number', 'date_expire', 'owner']
         model = Card
 
 
