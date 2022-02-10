@@ -1,5 +1,7 @@
 from .settings import *
 
+from os import environ as env
+
 LOCAL_APPS = [
     'testapi',
 ]

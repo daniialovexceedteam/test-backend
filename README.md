@@ -1,7 +1,7 @@
 # data sandbox
 sandbox for API requests
 #### clone a repo
-- git clone && cd test-backend
+- git clone https://github.com/daniialovexceedteam/test-backend.git && cd test-backend
 #### create .env file
 - touch .env
 #### add base settings to .env
@@ -11,5 +11,11 @@ sandbox for API requests
 - POSTGRES_HOST=db
 - SECRET_KEY=key
 - ALLOWED_HOSTS=localhost
-#### run docker-compose
-- docker-compose up -d --build
+#### run docker-compose for the first time
+- docker-compose --profile migrations up -d --build
+- docker exec -it web python manage.py createsuperuser
+#### regular run
+- docker-compose up
+
+### DOCS
+- localhost/swagger/
