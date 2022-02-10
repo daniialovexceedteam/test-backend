@@ -17,6 +17,7 @@ class AccountViewSet(ModelViewSet):
             return Account.objects.all()
         return Account.objects.filter(owner=self.request.user)
 
+
 class CardViewSet(ModelViewSet):
     queryset = Card.objects.all()
     permission_classes = [IsAuthenticated, CardPermission]
