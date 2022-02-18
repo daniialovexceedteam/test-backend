@@ -11,7 +11,8 @@ THIRD_PARTY_APPS = [
     'djoser',
     'rest_framework_simplejwt',
     'drf_yasg',
-    'django_extensions'
+    'django_extensions',
+    'corsheaders',
 ]
 
 INSTALLED_APPS = INSTALLED_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -35,3 +36,6 @@ DATABASES = {
         'HOST': HOST
     }
 }
+
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
