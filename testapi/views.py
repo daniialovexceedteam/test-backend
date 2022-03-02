@@ -38,12 +38,12 @@ class TransactionViewSet(ModelViewSet):
     def create(self, request, *args, **kwargs):
         from_card = request.data["from_card"]
         from_card = Card.objects.get(id=from_card)
-        from_card.amount -= request.data["amount"]
+        from_card.amount -= float(request.data["amount"])
         from_card.save()
 
         to_card = request.data["to_card"]
         to_card = Card.objects.get(id=to_card)
-        to_card.amount += request.data["amount"]
+        to_card.amount += float(request.data["amount"])
         to_card.save()
 
         return super().create(request, *args, **kwargs)
