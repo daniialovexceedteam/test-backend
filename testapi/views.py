@@ -42,7 +42,7 @@ class TransactionViewSet(ModelViewSet):
         from_card.save()
 
         to_card = request.data["to_card"]
-        to_card = Card.objects.get(id=to_card)
+        to_card = Card.objects.get(number=to_card)
         to_card.amount += request.data["amount"]
         to_card.save()
 
