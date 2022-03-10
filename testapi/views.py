@@ -1,3 +1,7 @@
+from decimal import Decimal, InvalidOperation
+
+from rest_framework.response import Response
+
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated
 
@@ -38,12 +42,18 @@ class TransactionViewSet(ModelViewSet):
     def create(self, request, *args, **kwargs):
         from_card = request.data["from_card"]
         from_card = Card.objects.get(id=from_card)
-        from_card.amount -= request.data["amount"]
+        try:
+            from_card.amount -= Decimal(request.data["amount"])
+        except InvalidOperation:
+            return Response({"message": "Invalid number"}, status=400)
         from_card.save()
 
         to_card = request.data["to_card"]
         to_card = Card.objects.get(number=to_card)
-        to_card.amount += request.data["amount"]
+        try:
+            to_card.amount += Decimal(request.data["amount"])
+        except InvalidOperation:
+            return Response({"message": "Invalid number"}, status=400)
         to_card.save()
 
         return super().create(request, *args, **kwargs)
