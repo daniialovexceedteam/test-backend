@@ -1,6 +1,7 @@
 from decimal import Decimal, InvalidOperation
 
 from django.db import transaction
+from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated
@@ -50,7 +51,7 @@ class TransactionViewSet(ModelViewSet):
                 to_card.amount += Decimal(request.data["amount"])
                 from_card.save()
                 to_card.save()
-            except InvalidOperation:
+            except (ObjectDoesNotExist, InvalidOperation, KeyError):
                 return Response({"message": "Invalid number, from or to card"}, status=400)
         request.data["to_card"] = to_card.id
         return super().create(request, *args, **kwargs)
