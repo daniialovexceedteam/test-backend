@@ -82,3 +82,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=123),
 }
+
+DJOSER = {
+    "SERIALIZERS": {
+        "current_user": "testapi.serializers.CustomUserSerializer"
+    }
+}

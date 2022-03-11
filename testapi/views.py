@@ -1,7 +1,7 @@
 from decimal import Decimal, InvalidOperation
 
+from django.db import transaction
 from rest_framework.response import Response
-
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated
 
@@ -40,16 +40,18 @@ class TransactionViewSet(ModelViewSet):
     lookup_field = 'id'
 
     def create(self, request, *args, **kwargs):
-        try:
-            from_card = Card.objects.get(number=from_card)
-            from_card.amount -= Decimal(request.data["amount"])
-            to_card = request.data["to_card"]
-            to_card.amount += Decimal(request.data["amount"])
-            to_card = Card.objects.get(id=to_card)
-        except InvalidOperation:
-            return Response({"message": "Invalid number"}, status=400)
-        from_card.save()
-        to_card.save()
+        with transaction.atomic():
+            try:
+                from_card = request.data["from_card"]
+                from_card = Card.objects.get(number=from_card)
+                from_card.amount -= Decimal(request.data["amount"])
+                to_card = request.data["to_card"]
+                to_card = Card.objects.get(id=to_card)
+                to_card.amount += Decimal(request.data["amount"])
+                from_card.save()
+                to_card.save()
+            except InvalidOperation:
+                return Response({"message": "Invalid number, from or to card"}, status=400)
         request.data["to_card"] = to_card.id
         return super().create(request, *args, **kwargs)
 
