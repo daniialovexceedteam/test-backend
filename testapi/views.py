@@ -40,22 +40,17 @@ class TransactionViewSet(ModelViewSet):
     lookup_field = 'id'
 
     def create(self, request, *args, **kwargs):
-        from_card = request.data["from_card"]
-        from_card = Card.objects.get(id=from_card)
         try:
+            from_card = Card.objects.get(number=from_card)
             from_card.amount -= Decimal(request.data["amount"])
+            to_card = request.data["to_card"]
+            to_card.amount += Decimal(request.data["amount"])
+            to_card = Card.objects.get(id=to_card)
         except InvalidOperation:
             return Response({"message": "Invalid number"}, status=400)
         from_card.save()
-
-        to_card = request.data["to_card"]
-        to_card = Card.objects.get(id=to_card)
-        try:
-            to_card.amount += Decimal(request.data["amount"])
-        except InvalidOperation:
-            return Response({"message": "Invalid number"}, status=400)
         to_card.save()
-
+        request.data["to_card"] = to_card.id
         return super().create(request, *args, **kwargs)
 
     def get_queryset(self):
