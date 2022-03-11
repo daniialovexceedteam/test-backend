@@ -44,10 +44,10 @@ class TransactionViewSet(ModelViewSet):
         with transaction.atomic():
             try:
                 from_card = request.data["from_card"]
-                from_card = Card.objects.get(number=from_card)
+                from_card = Card.objects.get(id=from_card)
                 from_card.amount -= Decimal(request.data["amount"])
                 to_card = request.data["to_card"]
-                to_card = Card.objects.get(id=to_card)
+                to_card = Card.objects.get(number=to_card)
                 to_card.amount += Decimal(request.data["amount"])
                 from_card.save()
                 to_card.save()
