@@ -2,6 +2,7 @@ from decimal import Decimal, InvalidOperation
 
 from django.db import transaction
 from django.core.exceptions import ObjectDoesNotExist
+from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated
@@ -9,6 +10,9 @@ from rest_framework.permissions import IsAuthenticated
 from .models import Account, Card, Transaction
 from .permissions import CardPermission
 from .serializers import AccountSerializer, TransactionSerializer, CardSerializer
+
+from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 
 class AccountViewSet(ModelViewSet):
@@ -21,7 +25,6 @@ class AccountViewSet(ModelViewSet):
         if self.request.user.is_superuser:
             return Account.objects.all()
         return Account.objects.filter(owner=self.request.user)
-
 
 class CardViewSet(ModelViewSet):
     queryset = Card.objects.all()
@@ -60,3 +63,27 @@ class TransactionViewSet(ModelViewSet):
         if self.request.user.is_superuser:
             return Transaction.objects.all()
         return Transaction.objects.filter(from_card__account__owner=self.request.user)
+
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    def post(self, request, *args, **kwargs):
+        response = super().post(request, *args, **kwargs)
+        response.set_cookie('access_token', response.data["access"])
+        response.set_cookie('refresh_token', response.data["refresh"])
+        return response
+
+class CustomJWTAuthentication(JWTAuthentication):
+    def authenticate(self, request):
+        
+        username = ''
+        header = self.get_header(request)
+        if header is None:
+            return None
+
+        raw_token = self.get_raw_token(header)
+        if raw_token is None:
+            return None
+
+        validated_token = self.get_validated_token(raw_token)
+
+        return self.get_user(validated_token), validated_token
