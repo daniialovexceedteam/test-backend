@@ -2,7 +2,6 @@ from decimal import Decimal, InvalidOperation
 
 from django.db import transaction
 from django.core.exceptions import ObjectDoesNotExist
-from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated
@@ -12,7 +11,6 @@ from .permissions import CardPermission
 from .serializers import AccountSerializer, TransactionSerializer, CardSerializer
 
 from rest_framework_simplejwt.views import TokenObtainPairView
-from rest_framework_simplejwt.authentication import JWTAuthentication
 
 
 class AccountViewSet(ModelViewSet):
@@ -72,18 +70,3 @@ class CustomTokenObtainPairView(TokenObtainPairView):
         response.set_cookie('refresh_token', response.data["refresh"])
         return response
 
-class CustomJWTAuthentication(JWTAuthentication):
-    def authenticate(self, request):
-        
-        username = ''
-        header = self.get_header(request)
-        if header is None:
-            return None
-
-        raw_token = self.get_raw_token(header)
-        if raw_token is None:
-            return None
-
-        validated_token = self.get_validated_token(raw_token)
-
-        return self.get_user(validated_token), validated_token

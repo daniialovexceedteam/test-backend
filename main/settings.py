@@ -1,11 +1,18 @@
 import os
 from pathlib import Path
 from datetime import timedelta
+from os import environ as env
 
+from dotenv import load_dotenv
+
+load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 DEBUG = True
+
+SECRET_KEY = env.get('SECRET_KEY')
+ALLOWED_HOSTS = ['localhost']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -15,6 +22,22 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
+
+
+LOCAL_APPS = [
+    'testapi',
+]
+
+THIRD_PARTY_APPS = [
+    'rest_framework',
+    'rest_framework_simplejwt',
+    'djoser',
+    'drf_yasg',
+    'django_extensions',
+    'corsheaders',
+]
+
+INSTALLED_APPS = INSTALLED_APPS + LOCAL_APPS + THIRD_PARTY_APPS
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -64,9 +87,32 @@ AUTH_PASSWORD_VALIDATORS = [
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'testapi.auth.CustomJWTAuthentication',
     )
 }
+
+
+
+NAME = env.get('POSTGRES_DB')
+USER = env.get('POSTGRES_USER')
+PASSWORD = env.get('POSTGRES_PASSWORD')
+HOST = env.get('POSTGRES_HOST')
+
+# if ALLOWED_HOSTS:
+#     ALLOWED_HOSTS = ALLOWED_HOSTS.split(' ')
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': NAME,
+        'USER': USER,
+        'PASSWORD': PASSWORD,
+        'HOST': HOST
+    }
+}
+
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
 
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
@@ -85,6 +131,6 @@ SIMPLE_JWT = {
 
 DJOSER = {
     "SERIALIZERS": {
-        "current_user": "testapi.serializers.CustomUserSerializer"
-    }
+        "current_user": "testapi.serializers.CustomUserSerializer",
+    },
 }
